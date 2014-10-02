@@ -16,7 +16,7 @@ var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 var server=http.createServer(app);
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('ipaddress', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');  
@@ -31,7 +31,10 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-
+if ('development' == app.get('env')) {
+  console.log('Express server Failed listening on port ' + app.get('port'));
+  app.use(express.errorHandler());
+}
 
 app.get('/', routes.index);
 app.get('/users', user.list);
