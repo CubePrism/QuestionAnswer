@@ -9,6 +9,7 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var app = express();
+var dbcrud = require('./routes/dbcrud');
 
 // all environments
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
@@ -31,10 +32,16 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
+exports.env = 'development' | process.env.NODE_ENV;
+console.log(app.get('env'));
 if ('development' == app.get('env')) {
+
+
+
   console.log('Express server Failed listening on port ' + app.get('port'));
   app.use(express.errorHandler());
 }
+
 
 app.get('/', routes.index);
 app.get('/users', user.list);
